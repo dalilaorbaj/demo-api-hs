@@ -23,7 +23,7 @@ export default function App() {
     <div className="app">
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
         <h1>🛰️ HubSpot Viewer</h1>
-        <span className="muted">explorador de la API · datos cacheados para no tocar el rate limit</span>
+        <span className="muted">Demo de integración con HubSpot CRM · datos en tiempo real con cache</span>
       </div>
 
       <MetaBar />

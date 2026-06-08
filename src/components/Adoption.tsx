@@ -336,7 +336,7 @@ export default function Adoption() {
   const currentM = metrics.find((m) => m.id === current);
 
   if (isLoading) return <div className="empty">Cargando…</div>;
-  if (metrics.length === 0) return <div className="panel empty">No hay vendedores con datos asignados.</div>;
+  if (metrics.length === 0) return <div className="panel empty">No se encontraron vendedores con actividad registrada. Verificá que los contactos, deals y tareas tengan propietario asignado en HubSpot.</div>;
 
   // Resumen del equipo
   const teamScore = Math.round(metrics.reduce((a, m) => a + m.score, 0) / metrics.length);
@@ -371,7 +371,7 @@ export default function Adoption() {
       <div className="grid cols-4">
         <Kpi big={`${teamScore}`} lbl="Adopción promedio del equipo" tone={`var(--${scoreColor(teamScore)})`} />
         <Kpi big={`${activeLast7}/${metrics.length}`} lbl="Vendedores activos (últ. 7 días)" />
-        <Kpi big={`${totalActivities} · ${totalCreated}`} lbl="Actividades · altas (contactos+negocios)" />
+        <Kpi big={`${totalActivities} · ${totalCreated}`} lbl="Actividades · nuevos contactos y negocios" />
         <Kpi big={String(totalMoves)} lbl="Avances de etapa" />
       </div>
 
@@ -412,12 +412,12 @@ export default function Adoption() {
           </tbody>
         </table>
         <p className="muted" style={{ fontSize: 12, marginBottom: 0 }}>
-          Contactos/Negocios = altas creadas. Avances = movimientos de etapa. Tocá una fila para ver el detalle.
+          Contactos/Negocios = registros creados en la ventana. Avances = movimientos manuales de etapa. Hacé clic en una fila para ver el detalle.
         </p>
       </div>
 
       <div className="panel">
-        <h2>Evolución del uso en el tiempo <span className="muted">(eventos de CRM por semana: actividad + altas + avances)</span></h2>
+        <h2>Evolución del uso en el tiempo <span className="muted">(eventos de CRM por semana)</span></h2>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={timeline} margin={{ left: 10, right: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#2a2f3a" />
@@ -458,14 +458,14 @@ export default function Adoption() {
           </div>
           <div className="panel">
             <h2>{ownerLabel(currentM.id, ownerMap)}</h2>
-            <h3 style={{ color: 'var(--green)' }}>Lo que viene haciendo bien</h3>
+            <h3 style={{ color: 'var(--green)' }}>Fortalezas</h3>
             {(() => {
               const good = strengths(currentM);
               return good.length > 0
                 ? <ul style={{ margin: '0 0 12px', paddingLeft: 18, lineHeight: 1.7 }}>{good.map((r, i) => <li key={i}>{r}</li>)}</ul>
-                : <p className="muted" style={{ marginTop: 0 }}>Todavía sin fortalezas marcadas — foco en arrancar con lo básico.</p>;
+                : <p className="muted" style={{ marginTop: 0 }}>Sin fortalezas destacadas aún — el foco está en consolidar el uso básico del CRM.</p>;
             })()}
-            <h3 style={{ color: 'var(--yellow)' }}>Qué trabajar</h3>
+            <h3 style={{ color: 'var(--yellow)' }}>Oportunidades de mejora</h3>
             <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
               {recommendations(currentM).map((r, i) => <li key={i}>{r}</li>)}
             </ul>
@@ -477,8 +477,9 @@ export default function Adoption() {
               <Kpi big={String(currentM.tasksTotal)} lbl="Tareas" />
             </div>
             <h3 style={{ marginTop: 16 }}>Actividad por tipo</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
               <Kpi big={String(currentM.byType.calls)} lbl="Llamadas" />
+              <Kpi big={String(currentM.byType.emails)} lbl="Emails" />
               <Kpi big={String(currentM.byType.meetings)} lbl="Reuniones" />
               <Kpi big={String(currentM.byType.notes)} lbl="Notas" />
             </div>
